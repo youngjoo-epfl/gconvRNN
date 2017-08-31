@@ -1,7 +1,7 @@
 # Graph Convolutional Recurrent Neural Networks (GCRNN)
 
 The code in this repository implements sequence modeling on graph structured dataset.
-Example code runs with [Penn TreeBank dataset]:https://github.com/carpedm20/RCMN/tree/master/data/ptb to predict next character, give sequence of sentence.
+Example code runs with [Penn TreeBank dataset](https://github.com/carpedm20/RCMN/tree/master/data/ptb) to predict next character, give sequence of sentence.
 
 an efficient generalization of the
 popular Convolutional Neural Networks (CNNs) to arbitrary graphs, presented in

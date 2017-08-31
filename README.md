@@ -1,45 +1,25 @@
 # Graph Convolutional Recurrent Neural Networks (GCRNN)
 
 The code in this repository implements sequence modeling on graph structured dataset.
-Example code runs with [Penn TreeBank dataset](https://github.com/carpedm20/RCMN/tree/master/data/ptb) to predict next character, give sequence of sentence.
+Example code runs with [Penn TreeBank dataset](http://aclweb.org/anthology/J93-2004)to predict next character, give sequence of sentence. The dataset can be downloaded from [here](https://github.com/carpedm20/RCMN/tree/master/data/ptb)
+The core part of the code is presented in our paper:
 
-an efficient generalization of the
-popular Convolutional Neural Networks (CNNs) to arbitrary graphs, presented in
-our paper:
-
-Michaël Defferrard, Xavier Bresson, Pierre Vandergheynst, [Convolutional Neural
-Networks on Graphs with Fast Localized Spectral Filtering][arXiv], Neural
-Information Processing Systems (NIPS), 2016.
+Youngjoo Seo, Michaël Defferrard, Xavier Bresson, Pierre Vandergheynst, [Structured Sequence Modeling With Graph Convolutional Recurrent Networks][arXiv](https://arxiv.org/pdf/1612.07659.pdf)
 
 The code is released under the terms of the [MIT license](LICENSE.txt). Please
 cite the above paper if you use it.
 
-Additional material:
-* [NIPS2016 spotlight video][video]
-* [Deep Learning on Graphs][slides_ntds]
-  (lecture for EPFL's master course [A Network Tour of Data Science][ntds])
+## Environment
+1. Tensorflow version 1.2
+2. python 2.7
+And we use graph convolutional filter based on ["Spectral Graph Convolutional Neural Network"](https://github.com/mdeff/cnn_graph)
 
-[video]: https://www.youtube.com/watch?v=cIA_m7vwOVQ
-[slides_ntds]: http://dx.doi.org/10.6084/m9.figshare.4491686
-[ntds]: https://github.com/mdeff/ntds_2016
-
-There is also implementations of the filters used in:
-* Joan Bruna, Wojciech Zaremba, Arthur Szlam, Yann LeCun, [Spectral Networks
-  and Locally Connected Networks on Graphs][bruna], International Conference on
-  Learning Representations (ICLR), 2014.
-* Mikael Henaff, Joan Bruna and Yann LeCun, [Deep Convolutional Networks on
-  Graph-Structured Data][henaff], arXiv, 2015.
-
-[arXiv]:  https://arxiv.org/abs/1606.09375
-[bruna]:  https://arxiv.org/abs/1312.6203
-[henaff]: https://arxiv.org/abs/1506.05163
-
-## Installation
+## Installation and running
 
 1. Clone this repository.
    ```sh
-   git clone https://github.com/mdeff/cnn_graph
-   cd cnn_graph
+   git clone https://github.com/youngjoo-epfl/gconvRNN
+   cd gconvRNN
    ```
 
 2. Install the dependencies. The code should run with TensorFlow 1.0 and newer.
@@ -47,31 +27,11 @@ There is also implementations of the filters used in:
    pip install -r requirements.txt  # or make install
    ```
 
-3. Play with the Jupyter notebooks.
+3. Run main with python.
    ```sh
-   jupyter notebook
+   python gcrn_main.py
    ```
 
-## Reproducing our results
 
-Run all the notebooks to reproduce the experiments on
-[MNIST](nips2016/mnist.ipynb) and [20NEWS](nips2016/20news.ipynb) presented in
-the paper.
-```sh
-cd nips2016
-make
-```
-
-## Using the model
-
-To use our graph ConvNet on your data, you need:
-
-1. a data matrix where each row is a sample and each column is a feature,
-2. a target vector,
-3. optionally, an adjacency matrix which encodes the structure as a graph.
-
-See the [usage notebook][usage] for a simple example with fabricated data.
-Please get in touch if you are unsure about applying the model to a different
-setting.
-
-[usage]: http://nbviewer.jupyter.org/github/mdeff/cnn_graph/blob/outputs/usage.ipynb
+## Model configurations
+You can see "config.py" to change the parameters for learning the model.

@@ -95,7 +95,7 @@ class gconvLSTMCell(tf.nn.rnn_cell.RNNCell):
         with tf.name_scope(type(self).__name__ + "myZeroState"):
             zero_state_c = tf.zeros([batch_size, self._nNode, self._num_units], name='c')
             zero_state_h = tf.zeros([batch_size, self._nNode, self._num_units], name='h')
-            print("When it called, I print batch_size", batch_size)
+            #print("When it called, I print batch_size", batch_size)
             return (zero_state_c, zero_state_h)
     
     def __call__(self, inputs, state, scope=None):

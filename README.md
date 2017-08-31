@@ -1,7 +1,7 @@
 # Graph Convolutional Recurrent Neural Networks (GCRNN)
 
 The code in this repository implements sequence modeling on graph structured dataset.
-Example code runs with [Penn TreeBank dataset](http://aclweb.org/anthology/J93-2004)to predict next character, give sequence of sentence. The dataset can be downloaded from [here](https://github.com/carpedm20/RCMN/tree/master/data/ptb)
+Example code runs with [Penn TreeBank dataset](http://aclweb.org/anthology/J93-2004) to predict next character, give sequence of sentence. The dataset can be downloaded from [here](https://github.com/carpedm20/RCMN/tree/master/data/ptb)
 The core part of the code is presented in our paper:
 
 Youngjoo Seo, Michaël Defferrard, Xavier Bresson, Pierre Vandergheynst, [Structured Sequence Modeling With Graph Convolutional Recurrent Networks][arXiv](https://arxiv.org/pdf/1612.07659.pdf)

@@ -26,7 +26,7 @@ data_arg.add_argument('--data_dir', type=str, default='datasets/') #data_dir : '
 train_arg = add_argument_group('Training')
 train_arg.add_argument('--task', type=str, default='ptb_char',
                        choices=['ptbchar', 'swissmt'], help='')
-train_arg.add_argument('--num_epochs', type=int, default=1000, help='')
+train_arg.add_argument('--num_epochs', type=int, default=100, help='')
 train_arg.add_argument('--batch_size', type=int, default=20, help='')
 train_arg.add_argument('--random_seed', type=int, default=123, help='')
 train_arg.add_argument('--max_step', type=int, default=1000000, help='')

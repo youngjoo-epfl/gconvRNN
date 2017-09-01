@@ -10,7 +10,7 @@ The code is released under the terms of the [MIT license](LICENSE.txt). Please
 cite the above paper if you use it.
 
 ## Status of code
-Currently this code works on Penn Treebank character level language modeling with "Model2" at the paper.
+Currently this code works on Penn Treebank character level language modeling with 'Model2'.
 I will update other experiments in the paper soon.
 
 ## Environment

@@ -16,7 +16,7 @@ I will update other experiments in the paper soon.
 ## Environment
 1. Tensorflow version 1.2
 2. python 2.7
-3. We use graph convolutional filter based on ["Spectral Graph Convolutional Neural Network"](https://github.com/mdeff/cnn_graph) Thanks for [Michaël](https://github.com/mdeff) for sharing the code.
+3. We use graph convolutional filter based on ["Spectral Graph Convolutional Neural Network"](https://github.com/mdeff/cnn_graph). Thanks for [Michaël](https://github.com/mdeff) for sharing the code.
 
 ## Installation and running
 

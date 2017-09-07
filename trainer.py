@@ -39,14 +39,11 @@ class Trainer(object):
         self.data_loader = BatchLoader(data_dir, dataset_name,
                         batch_size, num_time_steps)
         
-        ## need to put laplacian matrix in config and reset ##
-        W = self.data_loader.adj
+        ## Need to think about how we construct adj matrix(W)
+        W = self.data_loader.adj        
         laplacian = W/W.max()
         laplacian = scipy.sparse.csr_matrix(laplacian, dtype=np.float32)
-        lmax = graph.lmax(laplacian)
-        #config.laplacian = laplacian
-        #config.lmax = lmax
-        
+        lmax = graph.lmax(laplacian)      
         
         
         #idx2char = batchLoader_.idx2char
@@ -120,6 +117,24 @@ class Trainer(object):
 
             if n_epoch % 10 == 0:
                 self.saver.save(self.sess, self.model_dir)
+                
+        ##Testing
+        for n_sample in trange(self.data_loader.size[2], desc="Testing"):
+            batch_x, batch_y = self.data_loader.next_batch(2)
+                batch_x_onehot = convert_to_one_hot(batch_x, self.config.num_node)
+                reshaped = batch_x_onehot.reshape([self.config.batch_size, 
+                                                   self.config.num_time_steps,
+                                                   1,self.config.num_node])
+                batch_x = np.transpose(reshaped,(0, 3, 2, 1))
+
+                feed_dict = {
+                    self.model.rnn_input: batch_x,
+                    self.model.rnn_output: batch_y
+                }
+                res = self.model.test(self.sess, feed_dict, self.model_summary_writer,
+                                       with_output=True)
+                self.model_summary_writer = self._get_summary_writer(res)
+            
                 
     def _get_summary_writer(self, result):
         if result['step'] % self.log_step == 0:

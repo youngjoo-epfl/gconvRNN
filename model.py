@@ -8,6 +8,22 @@ import graph
 from IPython import embed
 from utils import show_all_variables
 
+#Test for tf1.0
+#from tf.contrib.rnn.core_rnn_cell import RNNCell
+tfversion_ = tf.VERSION.split(".")
+global tfversion
+if int(tfversion_[0]) < 1:
+    raise EnvironmentError("TF version should be above 1.0!!")
+
+if int(tfversion_[1]) < 1:
+    print("Working in TF version 1.0....")
+    from tensorflow.python.ops.rnn_cell_impl import _RNNCell as RNNCell
+    tfversion = "old"
+else:
+    print("Working in TF version 1.%d...." % tfversion_[1])
+    from tensorflow.python.ops.rnn_cell_impl import RNNCell
+    tfversion = "new"
+
 def cheby_conv(x, L, lmax, feat_out, K, W):
     '''
     x : [batch_size, N_node, feat_in] - input of each time step
@@ -67,11 +83,13 @@ class LSTMStateTuple(_LSTMStateTuple):
             raise TypeError("Inconsistent internal state")
         return c.dtype
 
-class gconvLSTMCell(tf.nn.rnn_cell.RNNCell):
+class gconvLSTMCell(RNNCell):
     def __init__(self, num_units, forget_bias=1.0,
                 state_is_tuple=True, activation=None, reuse=None,
                 laplacian=None, lmax=None, K=None, feat_in=None, nNode=None):
-        super(gconvLSTMCell, self).__init__(_reuse=reuse) #super what is it?
+        if tfversion == 'new':
+            super(gconvLSTMCell, self).__init__(_reuse=reuse) #super what is it?
+        
         self._num_units = num_units
         self._forget_bias = forget_bias
         self._state_is_tuple = state_is_tuple
@@ -252,9 +270,14 @@ class Model(object):
                                  laplacian=self.laplacian, lmax=self.lmax, 
                                  feat_in=self.feat_in, K=self.num_kernel, 
                                  nNode=self.num_node)
-            cell = tf.nn.rnn_cell.DropoutWrapper(cell, output_keep_prob=0.8)
-            #embed()
-            outputs, states = tf.nn.static_rnn(cell, self.rnn_input_seq, dtype=tf.float32)
+            if tfversion == 'new':
+                cell = tf.nn.rnn_cell.DropoutWrapper(cell, output_keep_prob=0.8)
+                outputs, states = tf.nn.static_rnn(cell, self.rnn_input_seq, dtype=tf.float32)
+            else:
+                outputs, states = tf.contrib.rnn.static_rnn(cell, self.rnn_input_seq, dtype=tf.float32)
+            #cell = tf.contrib.rnn.core_rnn_cell.DropoutWrapper(cell, output_keep_prob=0.8)
+            #Check the tf version here
+
 
             output_variable = {
                 'weight': tf.Variable(tf.random_normal([self.num_hidden, self.feat_out])),

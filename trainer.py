@@ -119,21 +119,21 @@ class Trainer(object):
                 self.saver.save(self.sess, self.model_dir)
                 
         ##Testing
-        for n_sample in trange(self.data_loader.size[2], desc="Testing"):
-            batch_x, batch_y = self.data_loader.next_batch(2)
-                batch_x_onehot = convert_to_one_hot(batch_x, self.config.num_node)
-                reshaped = batch_x_onehot.reshape([self.config.batch_size, 
-                                                   self.config.num_time_steps,
-                                                   1,self.config.num_node])
-                batch_x = np.transpose(reshaped,(0, 3, 2, 1))
+        #for n_sample in trange(self.data_loader.size[2], desc="Testing"):
+        #    batch_x, batch_y = self.data_loader.next_batch(2)
+        #    batch_x_onehot = convert_to_one_hot(batch_x, self.config.num_node)
+        #    reshaped = batch_x_onehot.reshape([self.config.batch_size, 
+        #                                           self.config.num_time_steps,
+        #                                           1,self.config.num_node])
+        #    batch_x = np.transpose(reshaped,(0, 3, 2, 1))
 
-                feed_dict = {
-                    self.model.rnn_input: batch_x,
-                    self.model.rnn_output: batch_y
-                }
-                res = self.model.test(self.sess, feed_dict, self.model_summary_writer,
-                                       with_output=True)
-                self.model_summary_writer = self._get_summary_writer(res)
+        #    feed_dict = {
+        #            self.model.rnn_input: batch_x,
+        #            self.model.rnn_output: batch_y
+        #        }
+        #    res = self.model.test(self.sess, feed_dict, self.model_summary_writer,
+        #                               with_output=True)
+        #    self.model_summary_writer = self._get_summary_writer(res)
             
                 
     def _get_summary_writer(self, result):

@@ -20,7 +20,7 @@ if int(tfversion_[1]) < 1:
     from tensorflow.python.ops.rnn_cell_impl import _RNNCell as RNNCell
     tfversion = "old"
 else:
-    print("Working in TF version 1.%d...." % tfversion_[1])
+    print("Working in TF version 1.%d...." % int(tfversion_[1]))
     from tensorflow.python.ops.rnn_cell_impl import RNNCell
     tfversion = "new"
 

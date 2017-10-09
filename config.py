@@ -39,6 +39,10 @@ train_arg.add_argument('--optimizer', type=str,
                        default='adam', choices=['adam_wgan', 'adam', 'sgd', 'rmsprop'], help='')
 train_arg.add_argument('--checkpoint_secs', type=int, default=300, help='')
 
+# Model args
+model_arg = add_argument_group('Model')
+model_arg.add_argument('--model_type', type=str, default='lstm',
+                        choices=['lstm', 'glstm'], help='')
 
 # Hyperparams for graph
 graph_arg = add_argument_group('Graph')

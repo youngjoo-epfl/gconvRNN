@@ -102,10 +102,17 @@ class Trainer(object):
                 # Fetch training data
                 batch_x, batch_y = self.data_loader.next_batch(0)
                 batch_x_onehot = convert_to_one_hot(batch_x, self.config.num_node)
-                reshaped = batch_x_onehot.reshape([self.config.batch_size, 
+                if self.config.model_type == 'lstm':
+                    reshaped = batch_x_onehot.reshape([self.config.batch_size, 
+                                                   self.config.num_node,
+                                                   self.config.num_time_steps])
+                    batch_x = reshaped
+                elif self.config.model_type == 'glstm':
+                    reshaped = batch_x_onehot.reshape([self.config.batch_size, 
                                                    self.config.num_time_steps,
                                                    1,self.config.num_node])
-                batch_x = np.transpose(reshaped,(0, 3, 2, 1))
+                    batch_x = np.transpose(reshaped,(0, 3, 2, 1))
+                
 
                 feed_dict = {
                     self.model.rnn_input: batch_x,

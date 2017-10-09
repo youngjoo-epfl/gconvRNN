@@ -227,6 +227,7 @@ class Model(object):
     """
     
     def __init__(self, config, laplacian, lmax):
+        self.model_type = config.model_type
         self.batch_size = config.batch_size
         self.num_node = config.num_node
         self.feat_in = config.feat_in
@@ -252,24 +253,48 @@ class Model(object):
         
         show_all_variables()
 
-    def _build_placeholders(self):        
-        self.rnn_input = tf.placeholder(tf.float32, 
+    def _build_placeholders(self):
+        if self.model_type == 'lstm':
+            #here, self.num_node is the input feature 
+            self.rnn_input = tf.placeholder(tf.float32, 
+                                        [self.batch_size, self.num_node, self.num_time_steps],
+                                        name="rnn_input")
+            self.rnn_input_seq = tf.unstack(self.rnn_input, self.num_time_steps, 2)
+        elif self.model_type == 'glstm':
+            self.rnn_input = tf.placeholder(tf.float32, 
                                         [self.batch_size, self.num_node, self.feat_in, self.num_time_steps],
                                         name="rnn_input")
+            self.rnn_input_seq = tf.unstack(self.rnn_input, self.num_time_steps, 3)
+        else:
+            raise Exception("[!] Unkown model type: {}".format(self.model_type))
+        
         self.rnn_output = tf.placeholder(tf.int64,
                                          [self.batch_size, self.num_time_steps],
                                          name="rnn_output")
-        self.rnn_input_seq = tf.unstack(self.rnn_input, self.num_time_steps, 3)
         self.rnn_output_seq = tf.unstack(self.rnn_output, self.num_time_steps, 1)
         self.model_step = tf.Variable(
             0, name='model_step', trainable=False)
             
     def _build_model(self, reuse=None):
         with tf.variable_scope("gconv_model", reuse=reuse) as sc:
-            cell = gconvLSTMCell(num_units=self.num_hidden, forget_bias=1.0, 
+            if self.model_type == 'lstm':
+                cell = tf.nn.rnn_cell.BasicLSTMCell(self.num_hidden, forget_bias=1.0)
+                n_classes = self.num_node
+                output_variable = {
+                    'weight': tf.Variable(tf.random_normal([self.num_hidden, n_classes])),
+                    'bias' : tf.Variable(tf.random_normal([n_classes]))}
+            elif self.model_type =='glstm':
+                cell = gconvLSTMCell(num_units=self.num_hidden, forget_bias=1.0, 
                                  laplacian=self.laplacian, lmax=self.lmax, 
                                  feat_in=self.feat_in, K=self.num_kernel, 
                                  nNode=self.num_node)
+                output_variable = {
+                    'weight': tf.Variable(tf.random_normal([self.num_hidden, self.feat_out])),
+                    'bias' : tf.Variable(tf.random_normal([self.feat_out]))}
+            
+            else:
+                raise Exception("[!] Unkown model type: {}".format(self.model_type))
+                
             if tfversion == 'new':
                 cell = tf.nn.rnn_cell.DropoutWrapper(cell, output_keep_prob=0.8)
                 outputs, states = tf.nn.static_rnn(cell, self.rnn_input_seq, dtype=tf.float32)
@@ -278,18 +303,19 @@ class Model(object):
             #cell = tf.contrib.rnn.core_rnn_cell.DropoutWrapper(cell, output_keep_prob=0.8)
             #Check the tf version here
 
-
-            output_variable = {
-                'weight': tf.Variable(tf.random_normal([self.num_hidden, self.feat_out])),
-                'bias' : tf.Variable(tf.random_normal([self.feat_out]))}
             predictions = []
             for output in outputs:
                 output_reshape = tf.reshape(output, [-1, self.num_hidden])
                 prediction = tf.matmul(output_reshape, output_variable['weight']) + output_variable['bias']
-                prediction = tf.reshape(prediction, [-1, self.num_node, 1])
+                if self.model_type == 'glstm':
+                    prediction = tf.reshape(prediction, [-1, self.num_node, 1])
                 predictions.append(prediction)
             
-            self.pred_out = tf.concat(predictions, 2)
+            if self.model_type == 'lstm':
+                self.pred_out = tf.concat(predictions, 1)
+            elif self.model_type == 'glstm':
+                self.pred_out = tf.concat(predictions, 2)
+
             #pred_out_softmax = tf.nn.softmax(pred_out,dim=1)
             self.predictions = predictions
             self.model_vars = tf.contrib.framework.get_variables(

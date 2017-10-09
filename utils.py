@@ -84,6 +84,12 @@ class BatchLoader(object):
 
         print("Reshaping tensors...")
         for split, data in enumerate(all_data):  # split = 0:train, 1:valid, 2:test
+            #Cutting training sample for check profile fast..(Temporal)
+            if split==0:
+                #Onlu for training set
+                length = data.shape[0]
+                data = data[:int(length/4)]
+            
             length = data.shape[0]
             data = data[: batch_size * seq_length * int(math.floor(length / (batch_size * seq_length)))]
             ydata = np.zeros_like(data)

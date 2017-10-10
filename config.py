@@ -41,7 +41,7 @@ train_arg.add_argument('--checkpoint_secs', type=int, default=300, help='')
 
 # Model args
 model_arg = add_argument_group('Model')
-model_arg.add_argument('--model_type', type=str, default='lstm',
+model_arg.add_argument('--model_type', type=str, default='glstm',
                         choices=['lstm', 'glstm'], help='')
 
 # Hyperparams for graph

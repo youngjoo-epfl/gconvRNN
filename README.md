@@ -4,10 +4,9 @@ The code in this repository implements sequence modeling on graph structured dat
 Example code runs with [Penn TreeBank dataset](http://aclweb.org/anthology/J93-2004) to predict next character, give sequence of sentence. The dataset can be downloaded from [here](https://github.com/carpedm20/RCMN/tree/master/data/ptb)
 The core part of the code is presented in our paper:
 
-Youngjoo Seo, Michaël Defferrard, Xavier Bresson, Pierre Vandergheynst, [Structured Sequence Modeling With Graph Convolutional Recurrent Networks](https://arxiv.org/pdf/1612.07659.pdf)
+Youngjoo Seo, Michaël Defferrard, Xavier Bresson, Pierre Vandergheynst, [Structured Sequence Modeling With Graph Convolutional Recurrent Networks][paper]
 
-The code is released under the terms of the [MIT license](LICENSE.txt). Please
-cite the above paper if you use it.
+[paper]: https://arxiv.org/abs/1612.07659
 
 ## Status of code
 Currently this code works on Penn Treebank character level language modeling with *Model2*. (Char-level modeling is not written in the paper, but I am testing it to reduce the size of input)
@@ -39,3 +38,18 @@ I will update other experiments in the paper soon.
 
 ## Model configurations
 You can see "config.py" to change the parameters for learning the model.
+
+## License & co
+
+The code in this repository is released under the terms of the [MIT license](LICENSE).
+Please cite our [paper] if you use it.
+
+```
+@article{gcrn,
+  title = {Structured Sequence Modeling with Graph Convolutional Recurrent Networks},
+  author = {Seo, Youngjoo and Defferrard, Micha\"el and Vandergheynst, Pierre and Bresson, Xavier},
+  journal = {arXiv},
+  year = {2016},
+  url = {https://arxiv.org/abs/1612.07659},
+}
+```
